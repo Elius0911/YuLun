@@ -7,17 +7,28 @@ import warnings  # 隱藏警告語
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
+# 可用模型
+model_list = ["small", "medium", "large"]
+def GetModelList():
+    return model_list
+
 def transcribe_audio(audio_file_path, model_choice):
-    # 讓使用者選擇模型
-    if model_choice == '1':
-        model_name = "base"
-    elif model_choice == '2':
-        model_name = "medium"
-    elif model_choice == '3':
-        model_name = "large"
-    else:
-        print("[ERROR] Invalid choice. Defaulting to BASE model...")
-        model_name = "base"
+    try:
+        # 將使用者輸入的選項轉換為整數
+        model_choice = int(model_choice)
+        
+        # 如果輸入的數字超出模型範圍，使用預設模型 small
+        if model_choice < 1 or model_choice > len(model_list):
+            print("[ERROR] Invalid choice. Defaulting to small model...")
+            model_name = "small"
+        else:
+            # 根據使用者選擇載入對應的模型
+            model_name = model_list[model_choice - 1]
+    
+    except ValueError:
+        # 如果使用者輸入不是數字，使用預設模型 small
+        print("[ERROR] Invalid input. Defaulting to small model...")
+        model_name = "small"
 
     # 加載模型
     print(f"[INFO] Loading {model_name} model...")
